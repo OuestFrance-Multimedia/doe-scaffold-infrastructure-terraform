@@ -1,0 +1,8 @@
+.terraform
+tfplan
+*.plan
+crash.log
+dev.log
+/logs
+errored.tfstate
+

@@ -1,0 +1,61 @@
+.scripts:
+  before_script:
+    - gitlabci-before-script
+  after_script:
+    - gitlabci-after-script
+
+image: registry.gitlab.com/additi/internal/dsi-devops-engineers/infrastructure-configuration-docker-gitlabci-terraform:latest
+
+variables:
+  TF_ROOT: ${CI_PROJECT_DIR}
+  TF_ADDRESS: ${CI_API_V4_URL}/projects/${CI_PROJECT_ID}/terraform/state/tfstate
+  GIT_SUBMODULE_STRATEGY: recursive #normal #recursive
+  # GIT_STRATEGY: clone
+  # GIT_CHECKOUT: "false"
+
+cache:
+  key: gitlab_cache_terraformDotDir
+  paths:
+    - ${TF_ROOT}/.terraform
+
+before_script:
+  - cd ${TF_ROOT}
+
+stages:
+  - validate
+  - plan
+  - apply
+
+validate:
+  stage: validate
+  script:
+    - gitlab-terraform init
+    - gitlab-terraform validate
+  only:
+    - web
+
+plan:
+  stage: plan
+  extends: .scripts
+  script:
+    - gitlab-terraform plan
+    - gitlab-terraform plan-json
+  artifacts:
+    name: plan
+    paths:
+      - ${TF_ROOT}/plan.cache
+    reports:
+      terraform: ${TF_ROOT}/plan.json
+  only:
+    - web
+
+apply:
+  stage: apply
+  extends: .scripts
+  script:
+    - gitlab-terraform apply
+  when: manual
+  only:
+    - web
+    - master
+
