@@ -1,6 +1,6 @@
 [submodule "modules/additi-project-factory"]
 	path = modules/additi-project-factory
-	url = ../../gitlab-additi/internal/dsi-devops-engineers/tfmodules/terraform-module-additi-project-factory.git
+	url = ../../dsi-devops-engineers/tfmodules/terraform-module-additi-project-factory.git
 [submodule "modules/additi-gitlab"]
 	path = modules/additi-gitlab
-	url = ../../gitlab-additi/internal/dsi-devops-engineers/tfmodules/terraform-module-additi-gitlab.git
+	url = ../../dsi-devops-engineers/tfmodules/terraform-module-additi-gitlab.git
