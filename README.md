@@ -1,10 +1,11 @@
 # Infos
 
-This is a 4 steps creation terraform workflow
+This is a 5 steps creation terraform workflow
   1. Follow the the pre-apply path
-  2. terraform apply -target 'module.additi-gitlab' -auto-approve
-  3. terraform apply -target 'module.additi-project-factory' -auto-approve
-  4. terraform apply -target 'module.additi-project-argocd' -auto-approve
+  2. terraform apply -target 'module.additi-gitlab'
+  3. terraform apply -target 'module.additi-project-factory'
+  4. terraform apply -target 'module.additi-project-argocd'
+  4. terraform apply -target 'module.additi-project-kubernetes'
 
 # pre-apply path
 
