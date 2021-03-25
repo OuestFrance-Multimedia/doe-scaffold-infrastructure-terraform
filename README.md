@@ -5,7 +5,7 @@ This is a 5 steps creation terraform workflow
   2. terraform apply -target 'module.additi-gitlab'
   3. terraform apply -target 'module.additi-project-factory'
   4. terraform apply -target 'module.additi-project-argocd'
-  4. terraform apply -target 'module.additi-project-kubernetes'
+  5. terraform apply -target 'module.additi-project-kubernetes'
 
 # pre-apply path
 
@@ -14,19 +14,14 @@ This is a 5 steps creation terraform workflow
 2. Pull submodules
 
 ```shell
-git submodule update --init --recursive
+git submodule update --init --recursive --remote
 ```
 
-To update submodules (git version >= 1.8. 2) :
-```shell
-git submodule update --recursive --remote
-```
+3. Add the script directory of [this repo](git@gitlab.com:additi/internal/dsi-devops-engineers/infrastructure-configuration-docker-gitlabci-terraform.git) to your PATH
 
-2. Add the script directory of [this repo](git@gitlab.com:additi/internal/dsi-devops-engineers/infrastructure-configuration-docker-gitlabci-terraform.git) to your PATH
+4. export GITLAB_TOKEN and GITLAB_USERNAME in your env
 
-3. export GITLAB_TOKEN and GITLAB_USERNAME in your env
-
-4. init terraform using http backend method :
+5. init terraform using http backend method :
 
 ```
 terraform init \
