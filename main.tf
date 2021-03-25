@@ -63,6 +63,8 @@ module "additi-project-factory" {
 
   gke = local.cluster
 
+  gke_cluster_name = "gifted-mclean"
+
   gke_node_pools = [{
     name         = "stoic-swirles"
     disk_type    = "pd-standard"
