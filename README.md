@@ -21,7 +21,11 @@ git submodule update --init --recursive --remote
 
 4. export GITLAB_TOKEN and GITLAB_USERNAME in your env
 
-5. init terraform using http backend method :
+5. export the SA Google application credentials to your env. generate  it from the /internal/dsi-devops-engineers/infrastructure-terraform-gcp-org-of2m.fr repo. 
+
+    export GOOGLE_APPLICATION_CREDENTIALS=/home/olivier/git/gitlab-additi/internal/dsi-devops-engineers/infrastructure-terraform-gcp-org-of2m.fr/credentials/terraform-sa.json
+
+6. init terraform using http backend method :
 
 ```
 terraform init \
