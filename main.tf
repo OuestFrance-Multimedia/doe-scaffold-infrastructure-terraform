@@ -1,8 +1,8 @@
 locals {
   cluster = true
   platforms = [
-    "preproduction",
-    "production"
+    "gifted-mclean-preproduction",
+    "gifted-mclean-production"
   ]
   prometheus = {
     enable                        = true
@@ -23,7 +23,7 @@ module "additi-gitlab" {
 
   projects = [ # Gitlab content-app and platform-helm repo to create
     {
-      name = "" # Application name (e.g `sample-project`)
+      name = "" # Application name (e.g `gifted-mclean`)
     },
   ]
 }
@@ -32,7 +32,7 @@ module "additi-project-factory" {
   source              = "./modules/additi-project-factory"
   gcp_org_id          = "" # gcloud organizations list
   gcp_billing_account = "" # gcloud beta billing accounts list
-  gcp_project         = "" # name of the GCP project to create (e.g. group-production)
+  gcp_project         = "" # name of the GCP project to create (e.g. group-common-prod)
   cidr_prefix         = "" # the platform cidr prefix `/16` (e.g. 10.13) refer to documentation to pick unattribued prefix
 
   members = [
@@ -46,9 +46,9 @@ module "additi-project-factory" {
 
   gitlabci_projects = [
     {
-      project              = module.additi-gitlab.gitlab_project.code_repos["content-app-name"].id, # replace `content-app-name` by the application name (line 8)
-      key_google_app_creds = "",                                                                    # GOOGLE_APPLICATION_CREDENTIALS + suffix SHOULD match line 17 (gcp_project)
-      key_repository       = ""                                                                     # REPOSITORY_GROUP + suffix SHOULD match line 17 (gcp_project)
+      project              = module.additi-gitlab.gitlab_project.code_repos["gifted-mclean"].id,    # replace `content-app-name` by the application name (line 8)
+      key_google_app_creds = "",                                                                    # GOOGLE_APPLICATION_CREDENTIALS + suffix SHOULD match line 35 (gcp_project)
+      key_repository       = ""                                                                     # REPOSITORY_GROUP + suffix SHOULD match line 35 (gcp_project)
     },
   ]
 

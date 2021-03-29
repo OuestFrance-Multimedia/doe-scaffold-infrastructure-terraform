@@ -14,7 +14,7 @@ This is a 5 steps creation terraform workflow
 2. Pull submodules
 
 ```shell
-git submodule update --init --recursive --remote
+git submodule update --init --recursive
 ```
 
 3. Add the script directory of [this repo](git@gitlab.com:additi/internal/dsi-devops-engineers/infrastructure-configuration-docker-gitlabci-terraform.git) to your PATH
