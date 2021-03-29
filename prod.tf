@@ -11,7 +11,7 @@ module "additi-project-factory-prod" {
 
   gitlabci_projects = [                                                                   # content-app gitlab projects to add secret ci-cd vars
     {
-      project              = module.additi-gitlab.gitlab_project.code_repos["app-a"].id,
+      project              = module.gitlab-projects.gitlab_project.code_repos["app-a"].id,
       key_google_app_creds = "GOOGLE_APPLICATION_CREDENTIALS-app-a",                      # GOOGLE_APPLICATION_CREDENTIALS + suffix SHOULD match line 35 (gcp_project)
       key_repository       = "REPOSITORY_GROUP-app-a"                                     # REPOSITORY_GROUP + suffix SHOULD match line 35 (gcp_project)
     },
