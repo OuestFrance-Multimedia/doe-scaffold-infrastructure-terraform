@@ -1,4 +1,4 @@
-module "additi-project-factory-noprod" {
+module "additi-project-factory-restricted" {
   source              = "./modules/additi-project-factory"
   gcp_org_id          = "" # gcloud organizations list
   gcp_billing_account = "" # gcloud beta billing accounts list
@@ -9,15 +9,15 @@ module "additi-project-factory-noprod" {
     "" # ReadOnly GCP IAM members (e.g. group:foo@domain.fr)
   ]
 
-  gitlabci_projects = [                                                                   # content-app gitlab projects to add secret ci-cd vars
+  gitlabci_projects = [ # content-app gitlab projects to add secret ci-cd vars
     {
       project              = module.gitlab-projects.gitlab_project.code_repos["app-a"].id,
-      key_google_app_creds = "GOOGLE_APPLICATION_CREDENTIALS-app-a",                      # GOOGLE_APPLICATION_CREDENTIALS + suffix SHOULD match line 35 (gcp_project)
-      key_repository       = "REPOSITORY_GROUP-app-a"                                     # REPOSITORY_GROUP + suffix SHOULD match line 35 (gcp_project)
+      key_google_app_creds = "GOOGLE_APPLICATION_CREDENTIALS-app-a", # GOOGLE_APPLICATION_CREDENTIALS + suffix SHOULD match line 35 (gcp_project)
+      key_repository       = "REPOSITORY_GROUP-app-a"                # REPOSITORY_GROUP + suffix SHOULD match line 35 (gcp_project)
     },
   ]
 
-  platforms = local.environments_noprod
+  platforms = local.environments_restricted
 
   common_authorized_networks = [
     { cidr_block = "8.8.8.8/24", display_name = "sample" }, # Authorized networks allowed to connect to ressources
@@ -72,20 +72,20 @@ module "additi-project-factory-noprod" {
   argocd     = local.prometheus
 }
 
-module "additi-kubernetes-noprod" {
+module "additi-kubernetes-restricted" {
   source                        = "./modules/additi-kubernetes"
   cluster                       = local.cluster
-  kubernetes_config             = module.additi-project-factory-noprod.kubernetes_config
-  platforms                     = local.environments_noprod
-  cloudsql_proxy_sa_private_key = module.additi-project-factory-noprod.cloudsql_proxy_sa_private_key
-  databases_credentials         = module.additi-project-factory-noprod.databases_credentials
+  kubernetes_config             = module.additi-project-factory-restricted.kubernetes_config
+  platforms                     = local.environments_restricted
+  cloudsql_proxy_sa_private_key = module.additi-project-factory-restricted.cloudsql_proxy_sa_private_key
+  databases_credentials         = module.additi-project-factory-restricted.databases_credentials
   prometheus                    = local.prometheus
   argocd = merge(
     local.argocd,
     {
-      admin_password   = module.additi-project-factory-noprod.module.project-factory.project_id
-      load_balancer_ip = module.additi-project-factory-noprod.argocd.load_balancer_ip
-      annotations      = module.additi-project-factory-noprod.argocd.annotations
+      admin_password   = module.additi-project-factory-restricted.module.project-factory.project_id
+      load_balancer_ip = module.additi-project-factory-restricted.argocd.load_balancer_ip
+      annotations      = module.additi-project-factory-restricted.argocd.annotations
     }
   )
   authorized_networks = module.additi-project-factory.authorized_networks
