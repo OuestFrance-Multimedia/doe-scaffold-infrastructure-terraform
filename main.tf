@@ -1,6 +1,6 @@
 locals {
   cluster = true
-  platforms = [
+  platforms = [                       # -> namespaces
     "gifted-mclean-preproduction",
     "gifted-mclean-production"
   ]
