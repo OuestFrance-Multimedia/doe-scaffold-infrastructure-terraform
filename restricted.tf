@@ -17,7 +17,7 @@ module "additi-project-factory-restricted" {
     },
   ]
 
-  platforms = local.environments_restricted
+  platforms = var.environments_restricted
 
   common_authorized_networks = [
     { cidr_block = "8.8.8.8/24", display_name = "sample" }, # Authorized networks allowed to connect to ressources
@@ -26,7 +26,7 @@ module "additi-project-factory-restricted" {
   # kubernetes_version = "latest"  # This is the default behaviour
   # release_channel = "STABLE"     # This is the default behaviour
 
-  gke = local.cluster
+  gke = var.cluster
 
   gke_cluster_name = "gifted-mclean"
 
@@ -68,20 +68,20 @@ module "additi-project-factory-restricted" {
 
   sql_database_instances = [{ name = "db_instance_name", tier = "db-n1-standard-1" }]
 
-  prometheus = local.prometheus
-  argocd     = local.prometheus
+  prometheus = var.prometheus
+  argocd     = var.prometheus
 }
 
 module "additi-kubernetes-restricted" {
   source                        = "./modules/additi-kubernetes"
-  cluster                       = local.cluster
+  cluster                       = var.cluster
   kubernetes_config             = module.additi-project-factory-restricted.kubernetes_config
-  platforms                     = local.environments_restricted
+  platforms                     = var.environments_restricted
   cloudsql_proxy_sa_private_key = module.additi-project-factory-restricted.cloudsql_proxy_sa_private_key
   databases_credentials         = module.additi-project-factory-restricted.databases_credentials
-  prometheus                    = local.prometheus
+  prometheus                    = var.prometheus
   argocd = merge(
-    local.argocd,
+    var.argocd,
     {
       admin_password   = module.additi-project-factory-restricted.module.project-factory.project_id
       load_balancer_ip = module.additi-project-factory-restricted.argocd.load_balancer_ip
