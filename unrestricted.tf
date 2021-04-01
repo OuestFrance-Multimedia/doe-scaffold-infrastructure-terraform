@@ -1,39 +1,28 @@
 module "additi-project-factory-unrestricted" {
-  source              = "./modules/additi-project-factory"
-  gcp_org_id          = "" # gcloud organizations list
-  gcp_billing_account = "" # gcloud beta billing accounts list
-  gcp_project         = "" # name of the GCP project to create (See confluence : /display/DSI/Provisionning)
-  cidr_prefix         = "" # the platform cidr prefix `/16` (e.g. 10.13) refer to documentation to pick unattribued prefix
+  source = "./modules/additi-project-factory"
+  gcp_org_id          = ""                                                  # `gcloud organizations list`
+  gcp_billing_account = ""                                                  # `gcloud beta billing accounts list`
+  gcp_project         = "ci-cd-pipeline"                                    # Confluence /display/DSI/Provisionning#Provisionning-CNPGCP !! DO NOT INCLUDE `-[unrestricted|ununrestricted]` suffix here
+  cidr_prefix         = "10.13"                                             # Confluence
 
   members = [
-    "" # ReadOnly GCP IAM members (e.g. group:foo@domain.fr)
+    ""                                                                      # Format "group:groupname@domain"
   ]
 
-  gitlabci_projects = [ # content-app gitlab projects to add secret ci-cd vars
-    {
-      project              = module.gitlab-projects.gitlab_project.code_repos["app-a"].id,
-      key_google_app_creds = "GOOGLE_APPLICATION_CREDENTIALS-app-a", # GOOGLE_APPLICATION_CREDENTIALS + suffix SHOULD match line 35 (gcp_project)
-      key_repository       = "REPOSITORY_GROUP-app-a"                # REPOSITORY_GROUP + suffix SHOULD match line 35 (gcp_project)
-    },
-  ]
-
-  platforms = var.environments_unrestricted
+  platforms = local.infrastructures.unrestricted.platforms
 
   common_authorized_networks = [
-    { cidr_block = "8.8.8.8/24", display_name = "sample" }, # Authorized networks allowed to connect to ressources
+    { cidr_block = "x.y.w.z/32", display_name = "custom IP" },
   ]
 
-  # kubernetes_version = "latest"  # This is the default behaviour
-  # release_channel = "STABLE"     # This is the default behaviour
+  sql_database_instances = []                                               # [{name = "foo",tier = "db-n1-standard-1"}] # [{name = "foo"}] or []
 
-  gke = var.cluster
-
-  gke_cluster_name = "gifted-mclean"
+  gke = true
 
   gke_node_pools = [{
-    name         = "stoic-swirles"
+    name         = "stoic-swirles"                                          # ensure to report this name in the underlying lines
     disk_type    = "pd-standard"
-    image_type   = "COS" # GKE strongly advise you to use COS image type
+    image_type   = "COS"                                                    # GKE strongly advise you to use COS image type
     machine_type = "n2-standard-2"
     min_count    = 2
     max_count    = 4
@@ -65,28 +54,34 @@ module "additi-project-factory-unrestricted" {
     "all" : [],
     "stoic-swirles" : []
   }]
-
-  sql_database_instances = [{ name = "db_instance_name", tier = "db-n1-standard-1" }]
-
-  prometheus = var.prometheus
-  argocd     = var.prometheus
 }
 
 module "additi-kubernetes-unrestricted" {
-  source                        = "./modules/additi-kubernetes"
-  cluster                       = var.cluster
-  kubernetes_config             = module.additi-project-factory-unrestricted.kubernetes_config
-  platforms                     = var.environments_unrestricted
-  cloudsql_proxy_sa_private_key = module.additi-project-factory-unrestricted.cloudsql_proxy_sa_private_key
-  databases_credentials         = module.additi-project-factory-unrestricted.databases_credentials
-  prometheus                    = var.prometheus
-  argocd = merge(
-    var.argocd,
+  source = "./modules/additi-kubernetes"
+  cluster                         = true
+  kubernetes_config               = module.additi-project-factory-unrestricted.kubernetes_config
+  platforms                       = local.infrastructures.unrestricted.platforms
+  cloudsql_proxy_sa_private_key   = module.additi-project-factory-unrestricted.google_application_credentials.cloudsql_proxy_sa_private_key
+  databases_credentials           = module.additi-project-factory-unrestricted.databases_credentials
+  prometheus                      = { enable = false }
+  argocd                          = merge(
+    try(local.infrastructures.unrestricted.argocd, {enable = true, ingress = false}),
     {
-      admin_password   = module.additi-project-factory-unrestricted.module.project-factory.project_id
-      load_balancer_ip = module.additi-project-factory-unrestricted.argocd.load_balancer_ip
-      annotations      = module.additi-project-factory-unrestricted.argocd.annotations
+      admin_password    = module.additi-project-factory-unrestricted.module.project-factory.project_id
+      load_balancer_ip  = module.additi-project-factory-unrestricted.argocd.load_balancer_ip
+      annotations       = module.additi-project-factory-unrestricted.argocd.annotations
     }
   )
-  authorized_networks = module.additi-project-factory.authorized_networks
+  authorized_networks             = module.additi-project-factory-unrestricted.authorized_networks
 }
+
+module "additi-argocd-unrestricted" {
+  source = "./modules/additi-argocd"
+
+  server_addr     = "${module.additi-project-factory-unrestricted.argocd.address}:443"
+  password        = module.additi-project-factory-unrestricted.module.project-factory.project_id
+  insecure        = true
+  applications    = local.infrastructures.unrestricted.argocd.applications
+  target_revision = local.infrastructures.unrestricted.argocd.target_revision
+}
+

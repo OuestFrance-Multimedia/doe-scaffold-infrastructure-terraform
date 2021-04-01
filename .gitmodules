@@ -1,12 +1,12 @@
 [submodule "modules/additi-project-factory"]
 	path = modules/additi-project-factory
-	url = ../../dsi-devops-engineers/tfmodules/terraform-module-additi-project-factory.git
+	url = ../../gitlab-additi/internal/dsi-devops-engineers/tfmodules/terraform-module-additi-project-factory.git
 [submodule "modules/additi-gitlab"]
 	path = modules/additi-gitlab
-	url = ../../dsi-devops-engineers/tfmodules/terraform-module-additi-gitlab.git
+	url = ../../gitlab-additi/internal/dsi-devops-engineers/tfmodules/terraform-module-additi-gitlab.git
 [submodule "modules/additi-kubernetes"]
 	path = modules/additi-kubernetes
-	url = ../../dsi-devops-engineers/tfmodules/terraform-module-additi-kubernetes.git
+	url = ../../gitlab-additi/internal/dsi-devops-engineers/tfmodules/terraform-module-additi-kubernetes.git
 [submodule "modules/additi-argocd"]
 	path = modules/additi-argocd
-	url = ../../dsi-devops-engineers/tfmodules/terraform-module-additi-argocd.git
+	url = ../../gitlab-additi/internal/dsi-devops-engineers/tfmodules/terraform-module-additi-argocd.git
