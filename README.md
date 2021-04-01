@@ -1,6 +1,6 @@
 # Infos
 
-This is a n steps creation terraform workflow
+This is a 7 steps creation terraform workflow
   1. Follow the the pre-apply path
   2. terraform apply -target 'module.additi-gitlab'
   3. terraform apply -target 'module.additi-project-factory'
@@ -9,7 +9,7 @@ This is a n steps creation terraform workflow
   5. terraform apply -target 'module.additi-project-kubernetes-unrestricted'
   4. terraform apply -target 'module.additi-project-argocd-unrestricted'
 
-# pre-apply path
+# Bootstrap or update the project
 
 1. Clone this repo localy
 
