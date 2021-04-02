@@ -10,3 +10,6 @@
 [submodule "modules/additi-argocd"]
 	path = modules/additi-argocd
 	url = ../../dsi-devops-engineers/tfmodules/terraform-module-additi-argocd.git
+[submodule "modules/additi-gitlab-variables"]
+	path = modules/additi-gitlab-variables
+	url = ../../dsi-devops-engineers/tfmodules/terraform-module-additi-gitlab-variables.git

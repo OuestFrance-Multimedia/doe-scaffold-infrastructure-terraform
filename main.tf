@@ -59,10 +59,45 @@ locals {
       }
     }
   }
+  variables = {
+    restricted = {
+      REPOSITORY = {
+        variable_type = "env_var"
+        value         = module.additi-project-factory-restricted.container_image_registry_repository
+      }
+      GOOGLE_APPLICATION_CREDENTIALS = {
+        variable_type = "file"
+        value         = base64decode(module.additi-project-factory-restricted.google_application_credentials.ci_sa_private_key)
+      }      
+    }
+    unrestricted = {
+      REPOSITORY = {
+        variable_type = "env_var"
+        value         = module.additi-project-factory-unrestricted.container_image_registry_repository
+      }
+      GOOGLE_APPLICATION_CREDENTIALS = {
+        variable_type = "file"
+        value         = base64decode(module.additi-project-factory-unrestricted.google_application_credentials.ci_sa_private_key)
+      }      
+    }
+  }
 }
 
 module "additi-gitlab" {
   source = "./modules/additi-gitlab"
   full_path     = "additi/internal/dsi-devops-engineers"
   applications  = local.applications
+}
+
+output "argocd" {
+  value = {
+    restricted = {
+      server_addr = "${module.additi-project-factory-restricted.argocd.address}:443"
+      password    = module.additi-kubernetes-restricted.argocd.admin_password
+    }
+    unrestricted = {
+      server_addr = "${module.additi-project-factory-unrestricted.argocd.address}:443"
+      password    = module.additi-kubernetes-unrestricted.argocd.admin_password
+    }
+  }
 }
