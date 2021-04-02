@@ -56,6 +56,14 @@ module "additi-project-factory-restricted" {
   }]
 }
 
+module "additi-gitlab-variables-restricted" {
+  source = "./modules/additi-gitlab-variables"
+  
+  variables   = local.variables.restricted
+  projects    = module.additi-gitlab.gitlab_project.code_repos
+  suffix      = "RESTRICTED"
+}
+
 module "additi-kubernetes-restricted" {
   source = "./modules/additi-kubernetes"
   cluster                         = true
@@ -63,15 +71,12 @@ module "additi-kubernetes-restricted" {
   platforms                       = local.infrastructures.restricted.platforms
   cloudsql_proxy_sa_private_key   = module.additi-project-factory-restricted.google_application_credentials.cloudsql_proxy_sa_private_key
   databases_credentials           = module.additi-project-factory-restricted.databases_credentials
-  prometheus                      = { enable = false }
-  argocd                          = merge(
-    try(local.infrastructures.restricted.argocd, {enable = true, ingress = false}),
-    {
-      admin_password    = module.additi-project-factory-restricted.module.project-factory.project_id
-      load_balancer_ip  = module.additi-project-factory-restricted.argocd.load_balancer_ip
-      annotations       = module.additi-project-factory-restricted.argocd.annotations
-    }
-  )
+  argocd                          = {
+    enable            = true
+    ingress           = false
+    load_balancer_ip  = module.additi-project-factory-restricted.argocd.load_balancer_ip
+    annotations       = module.additi-project-factory-restricted.argocd.annotations
+  }
   authorized_networks             = module.additi-project-factory-restricted.authorized_networks
 }
 
@@ -79,7 +84,7 @@ module "additi-argocd-restricted" {
   source = "./modules/additi-argocd"
 
   server_addr     = "${module.additi-project-factory-restricted.argocd.address}:443"
-  password        = module.additi-project-factory-restricted.module.project-factory.project_id
+  password        = module.additi-kubernetes-restricted.argocd.admin_password
   insecure        = true
   applications    = local.infrastructures.restricted.argocd.applications
   target_revision = local.infrastructures.restricted.argocd.target_revision

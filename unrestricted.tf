@@ -56,6 +56,14 @@ module "additi-project-factory-unrestricted" {
   }]
 }
 
+module "additi-gitlab-variables-unrestricted" {
+  source = "./modules/additi-gitlab-variables"
+  
+  variables   = local.variables.unrestricted
+  projects    = module.additi-gitlab.gitlab_project.code_repos
+  suffix      = "UNRESTRICTED"
+}
+
 module "additi-kubernetes-unrestricted" {
   source = "./modules/additi-kubernetes"
   cluster                         = true
@@ -64,14 +72,12 @@ module "additi-kubernetes-unrestricted" {
   cloudsql_proxy_sa_private_key   = module.additi-project-factory-unrestricted.google_application_credentials.cloudsql_proxy_sa_private_key
   databases_credentials           = module.additi-project-factory-unrestricted.databases_credentials
   prometheus                      = { enable = false }
-  argocd                          = merge(
-    try(local.infrastructures.unrestricted.argocd, {enable = true, ingress = false}),
-    {
-      admin_password    = module.additi-project-factory-unrestricted.module.project-factory.project_id
-      load_balancer_ip  = module.additi-project-factory-unrestricted.argocd.load_balancer_ip
-      annotations       = module.additi-project-factory-unrestricted.argocd.annotations
-    }
-  )
+  argocd                          = {
+    enable            = true
+    ingress           = false
+    load_balancer_ip  = module.additi-project-factory-unrestricted.argocd.load_balancer_ip
+    annotations       = module.additi-project-factory-unrestricted.argocd.annotations
+  }
   authorized_networks             = module.additi-project-factory-unrestricted.authorized_networks
 }
 
@@ -79,7 +85,7 @@ module "additi-argocd-unrestricted" {
   source = "./modules/additi-argocd"
 
   server_addr     = "${module.additi-project-factory-unrestricted.argocd.address}:443"
-  password        = module.additi-project-factory-unrestricted.module.project-factory.project_id
+  password        = module.additi-kubernetes-unrestricted.argocd.admin_password
   insecure        = true
   applications    = local.infrastructures.unrestricted.argocd.applications
   target_revision = local.infrastructures.unrestricted.argocd.target_revision
