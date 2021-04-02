@@ -2,7 +2,7 @@ module "additi-project-factory-unrestricted" {
   source = "./modules/additi-project-factory"
   gcp_org_id          = ""                                                  # `gcloud organizations list`
   gcp_billing_account = ""                                                  # `gcloud beta billing accounts list`
-  gcp_project         = "ci-cd-pipeline"                                    # Confluence /display/DSI/Provisionning#Provisionning-CNPGCP !! DO NOT INCLUDE `-[unrestricted|ununrestricted]` suffix here
+  gcp_project         = ""                                                  # Confluence /display/DSI/Provisionning#Provisionning-CNPGCP !!
   cidr_prefix         = "10.13"                                             # Confluence
 
   members = [
