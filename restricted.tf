@@ -11,9 +11,7 @@ module "additi-project-factory-restricted" {
 
   platforms = local.infrastructures.restricted.platforms
 
-  common_authorized_networks = [
-    { cidr_block = "x.y.w.z/32", display_name = "custom IP" },
-  ]
+  common_authorized_networks = local.common.common_authorized_networks
 
   sql_database_instances = []                                               # [{name = "foo",tier = "db-n1-standard-1"}] # [{name = "foo"}] or []
 
