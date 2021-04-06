@@ -90,4 +90,3 @@ module "restricted-argocd" {
   applications    = local.infrastructures.restricted.argocd.applications
   target_revision = local.infrastructures.restricted.argocd.target_revision
 }
-
