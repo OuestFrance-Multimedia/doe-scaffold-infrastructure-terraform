@@ -7,6 +7,7 @@ locals {
     common_authorized_networks = [
       { cidr_block = "x.y.w.z/32", display_name = "custom IP" },
     ]
+    gitlab_full_path    = ""
   }
 }
 
@@ -97,7 +98,7 @@ locals {
 
 module "gitlab" {
   source = "./modules/additi-gitlab"
-  full_path     = "additi/internal/dsi-devops-engineers/demo"
+  full_path     = local.gitlab_full_path
   applications  = local.applications
 }
 
