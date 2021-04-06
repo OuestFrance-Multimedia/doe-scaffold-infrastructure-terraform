@@ -26,32 +26,32 @@ module "restricted-project-factory" {
     max_count    = 4
   }]
 
-  gke_node_pools_labels = [{
+  gke_node_pools_labels = {
     "all" : {},
     "stoic-swirles" : {}
-  }]
+  }
 
-  gke_node_pools_metadata = [{
+  gke_node_pools_metadata = {
     "all" : {},
     "stoic-swirles" : {}
-  }]
+  }
 
-  gke_node_pools_oauth_scopes = [{
+  gke_node_pools_oauth_scopes = {
     "all" : [
       "https://www.googleapis.com/auth/cloud-platform"
     ],
     "stoic-swirles" : []
-  }]
+  }
 
-  gke_node_pools_tags = [{
+  gke_node_pools_tags = {
     "all" : [],
     "stoic-swirles" : []
-  }]
+  }
 
-  gke_node_pools_taints = [{
+  gke_node_pools_taints = {
     "all" : [],
     "stoic-swirles" : []
-  }]
+  }
 }
 
 module "restricted-gitlab-variables" {
