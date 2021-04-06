@@ -1,4 +1,16 @@
 locals {
+  common = {
+    gcp_org_id          = ""                              # gcloud organizations list --filter="displayName=XXXX" --format="value(name)"
+    gcp_billing_account = ""                              # gcloud beta billing accounts list --filter="displayName=YYYY" --format="value(name)"
+    gcp_project         = ""                              # name must be 4 to 30 characters with lowercase and uppercase letters, numbers, hyphen, single-quote, double-quote, space, and exclamation point.        demo-devops-5d4e project_id contains prohibited words
+    cidr_prefix         = ""
+    common_authorized_networks = [
+      { cidr_block = "x.y.w.z/32", display_name = "custom IP" },
+    ]
+  }
+}
+
+locals {
   app1_name = "app-name"
   #app2_name = "app-name"
   applications = {

@@ -1,9 +1,9 @@
 module "additi-project-factory-unrestricted" {
   source = "./modules/additi-project-factory"
-  gcp_org_id          = ""                                                  # `gcloud organizations list`
-  gcp_billing_account = ""                                                  # `gcloud beta billing accounts list`
-  gcp_project         = ""                                                  # Confluence /display/DSI/Provisionning#Provisionning-CNPGCP !!
-  cidr_prefix         = "10.13"                                             # Confluence
+  gcp_org_id          = local.common.gcp_org_id
+  gcp_billing_account = local.common.gcp_billing_account
+  gcp_project         = "${local.common.gcp_project}-unrestricted"
+  cidr_prefix         = local.common.cidr_prefix
 
   members = [
     ""                                                                      # Format "group:groupname@domain"
