@@ -69,7 +69,6 @@ module "unrestricted-kubernetes" {
   platforms                       = local.infrastructures.unrestricted.platforms
   cloudsql_proxy_sa_private_key   = module.unrestricted-project-factory.google_application_credentials.cloudsql_proxy_sa_private_key
   databases_credentials           = module.unrestricted-project-factory.databases_credentials
-  prometheus = { enable = false }
   argocd = {
     enable            = true
     ingress           = false

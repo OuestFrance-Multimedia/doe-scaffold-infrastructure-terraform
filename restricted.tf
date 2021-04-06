@@ -69,7 +69,6 @@ module "restricted-kubernetes" {
   platforms                       = local.infrastructures.restricted.platforms
   cloudsql_proxy_sa_private_key   = module.restricted-project-factory.google_application_credentials.cloudsql_proxy_sa_private_key
   databases_credentials           = module.restricted-project-factory.databases_credentials
-  prometheus = { enable = false }
   argocd = {
     enable            = true
     ingress           = false
