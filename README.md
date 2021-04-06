@@ -2,15 +2,15 @@
 
 This is a 10 steps creation terraform workflow
   1. Follow the the pre-apply path
-  2. terraform apply -target 'module.additi-gitlab'
-  3. terraform apply -target 'module.additi-project-factory-restricted'
-  4. terraform apply -target 'module.additi-gitlab-variables-restricted'
-  5. terraform apply -target 'module.additi-project-kubernetes-restricted'
-  6. terraform apply -target 'module.additi-project-argocd-restricted'
-  7. terraform apply -target 'module.additi-project-factory-unrestricted'
-  8. terraform apply -target 'module.additi-gitlab-variables-unrestricted'
-  9. terraform apply -target 'module.additi-project-kubernetes-unrestricted'
-  10. terraform apply -target 'module.additi-project-argocd-unrestricted'
+  2. terraform apply -target 'module.gitlab'
+  3. terraform apply -target 'module.project-factory-unrestricted'
+  4. terraform apply -target 'module.gitlab-variables-unrestricted'
+  5. terraform apply -target 'module.project-kubernetes-unrestricted'
+  6. terraform apply -target 'module.project-argocd-unrestricted'
+  7. terraform apply -target 'module.project-factory-restricted'
+  8. terraform apply -target 'module.gitlab-variables-restricted'
+  9. terraform apply -target 'module.project-kubernetes-restricted'
+  10. terraform apply -target 'module.project-argocd-restricted'
 
 # Bootstrap or update the project
 
