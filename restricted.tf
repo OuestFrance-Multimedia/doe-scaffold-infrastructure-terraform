@@ -56,35 +56,36 @@ module "additi-project-factory-restricted" {
   }]
 }
 
-module "additi-gitlab-variables-restricted" {
+module "restricted-gitlab-variables" {
   source = "./modules/additi-gitlab-variables"
   
   variables   = local.variables.restricted
-  projects    = module.additi-gitlab.gitlab_project.code_repos
-  suffix      = "RESTRICTED"
+  projects    = module.gitlab.gitlab_project.code_repos
+  suffix      = "restricted"
 }
 
-module "additi-kubernetes-restricted" {
+module "restricted-kubernetes" {
   source = "./modules/additi-kubernetes"
   cluster                         = true
-  kubernetes_config               = module.additi-project-factory-restricted.kubernetes_config
+  kubernetes_config               = module.restricted-project-factory.kubernetes_config
   platforms                       = local.infrastructures.restricted.platforms
-  cloudsql_proxy_sa_private_key   = module.additi-project-factory-restricted.google_application_credentials.cloudsql_proxy_sa_private_key
-  databases_credentials           = module.additi-project-factory-restricted.databases_credentials
-  argocd                          = {
+  cloudsql_proxy_sa_private_key   = module.restricted-project-factory.google_application_credentials.cloudsql_proxy_sa_private_key
+  databases_credentials           = module.restricted-project-factory.databases_credentials
+  prometheus = { enable = false }
+  argocd = {
     enable            = true
     ingress           = false
-    load_balancer_ip  = module.additi-project-factory-restricted.argocd.load_balancer_ip
-    annotations       = module.additi-project-factory-restricted.argocd.annotations
+    load_balancer_ip  = module.restricted-project-factory.argocd.load_balancer_ip
+    annotations       = module.restricted-project-factory.argocd.annotations
   }
-  authorized_networks             = module.additi-project-factory-restricted.authorized_networks
+  authorized_networks             = module.restricted-project-factory.authorized_networks
 }
 
-module "additi-argocd-restricted" {
+module "restricted-argocd" {
   source = "./modules/additi-argocd"
 
-  server_addr     = "${module.additi-project-factory-restricted.argocd.address}:443"
-  password        = module.additi-kubernetes-restricted.argocd.admin_password
+  server_addr     = "${module.restricted-project-factory.argocd.address}:443"
+  password        = module.restricted-kubernetes.argocd.admin_password
   insecure        = true
   applications    = local.infrastructures.restricted.argocd.applications
   target_revision = local.infrastructures.restricted.argocd.target_revision

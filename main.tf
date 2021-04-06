@@ -17,15 +17,15 @@ locals {
   }
   sources = {
     (local.app1_name) = {
-      url       = try(module.additi-gitlab.gitlab_project.manifest_repos[local.app1_name].http_url_to_repo, "")
-      username  = try(module.additi-gitlab.gitlab_deploy_token.deploy_tokens[local.app1_name].username, "")
-      password  = try(module.additi-gitlab.gitlab_deploy_token.deploy_tokens[local.app1_name].token, "")
+      url       = try(module.gitlab.gitlab_project.manifest_repos[local.app1_name].http_url_to_repo, "")
+      username  = try(module.gitlab.gitlab_deploy_token.deploy_tokens[local.app1_name].username, "")
+      password  = try(module.gitlab.gitlab_deploy_token.deploy_tokens[local.app1_name].token, "")
     }
-    #(local.app2_name) = {
-    #  url       = try(module.additi-gitlab.gitlab_project.manifest_repos[local.app2_name].http_url_to_repo, "")
-    #  username  = try(module.additi-gitlab.gitlab_deploy_token.deploy_tokens[local.app2_name].username, "")
-    #  password  = try(module.additi-gitlab.gitlab_deploy_token.deploy_tokens[local.app2_name].token, "")
-    #}
+    # (local.app2_name) = {
+    #   url       = try(module.gitlab.gitlab_project.manifest_repos[local.app2_name].http_url_to_repo, "")
+    #   username  = try(module.gitlab.gitlab_deploy_token.deploy_tokens[local.app2_name].username, "")
+    #   password  = try(module.gitlab.gitlab_deploy_token.deploy_tokens[local.app2_name].token, "")
+    # }
   }
   infrastructures = {
     restricted = {
@@ -63,41 +63,41 @@ locals {
     restricted = {
       REPOSITORY = {
         variable_type = "env_var"
-        value         = module.additi-project-factory-restricted.container_image_registry_repository
+        value         = module.restricted-project-factory.container_image_registry_repository
       }
       GOOGLE_APPLICATION_CREDENTIALS = {
         variable_type = "file"
-        value         = base64decode(module.additi-project-factory-restricted.google_application_credentials.ci_sa_private_key)
+        value         = base64decode(module.restricted-project-factory.google_application_credentials.ci_sa_private_key)
       }      
     }
     unrestricted = {
       REPOSITORY = {
         variable_type = "env_var"
-        value         = module.additi-project-factory-unrestricted.container_image_registry_repository
+        value         = module.unrestricted-project-factory.container_image_registry_repository
       }
       GOOGLE_APPLICATION_CREDENTIALS = {
         variable_type = "file"
-        value         = base64decode(module.additi-project-factory-unrestricted.google_application_credentials.ci_sa_private_key)
+        value         = base64decode(module.unrestricted-project-factory.google_application_credentials.ci_sa_private_key)
       }      
     }
   }
 }
 
-module "additi-gitlab" {
+module "gitlab" {
   source = "./modules/additi-gitlab"
-  full_path     = "additi/internal/dsi-devops-engineers"
+  full_path     = "additi/internal/dsi-devops-engineers/demo"
   applications  = local.applications
 }
 
 output "argocd" {
   value = {
     restricted = {
-      server_addr = "${module.additi-project-factory-restricted.argocd.address}:443"
-      password    = module.additi-kubernetes-restricted.argocd.admin_password
+      server_addr = "${module.restricted-project-factory.argocd.address}:443"
+      password    = module.restricted-kubernetes.argocd.admin_password
     }
     unrestricted = {
-      server_addr = "${module.additi-project-factory-unrestricted.argocd.address}:443"
-      password    = module.additi-kubernetes-unrestricted.argocd.admin_password
+      server_addr = "${module.unrestricted-project-factory.argocd.address}:443"
+      password    = module.unrestricted-kubernetes.argocd.admin_password
     }
   }
 }
