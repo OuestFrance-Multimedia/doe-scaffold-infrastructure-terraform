@@ -98,7 +98,7 @@ locals {
 
 module "gitlab" {
   source = "./modules/additi-gitlab"
-  full_path     = local.gitlab_full_path
+  full_path     = local.common.gitlab_full_path
   applications  = local.applications
 }
 
