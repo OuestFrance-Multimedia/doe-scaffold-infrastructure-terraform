@@ -28,8 +28,8 @@ locals {
   applications = {
     (local.app1_name) = {
       infrastructures = {
-        restricted    = formatlist("${local.app1_name}-%s",["preproduction", "production"]),
-        unrestricted  = formatlist("${local.app1_name}-%s",["recette1","recette2","recette3"]),
+        restricted    = formatlist("${local.app1_name}-%s",["preprod", "prod"]),
+        unrestricted  = formatlist("${local.app1_name}-%s",["rec1","rec2","rec3"]),
       }
       gitlab = {
         code = {
