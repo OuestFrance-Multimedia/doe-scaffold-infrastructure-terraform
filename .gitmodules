@@ -1,0 +1,33 @@
+[submodule "modules/additi-argocd-config"]
+	path = modules/additi-argocd-config
+	url = ../tfmodules/terraform-module-additi-argocd-config.git
+[submodule "modules/additi-argocd-install"]
+	path = modules/additi-argocd-install
+	url = ../tfmodules/terraform-module-additi-argocd-install.git
+[submodule "modules/additi-gilab"]
+	path = modules/additi-gilab
+	url = ../tfmodules/terraform-module-additi-gitlab.git
+[submodule "modules/additi-gilab-variables"]
+	path = modules/additi-gilab-variables
+	url = ../tfmodules/terraform-module-additi-gitlab-variables.git
+[submodule "modules/additi-google-compute-network"]
+	path = modules/additi-google-compute-network
+	url = ../tfmodules/terraform-module-additi-google-compute-network.git
+[submodule "modules/additi-grafana"]
+	path = modules/additi-grafana
+	url = ../tfmodules/terraform-module-additi-grafana.git
+[submodule "modules/additi-kube-prometheus-stack-with-grafana-install"]
+	path = modules/additi-kube-prometheus-stack-with-grafana-install
+	url = ../tfmodules/terraform-module-additi-kube-prometheus-stack-with-grafana-install.git
+[submodule "modules/additi-kubernetes"]
+	path = modules/additi-kubernetes
+	url = ../tfmodules/terraform-module-additi-kubernetes.git
+[submodule "modules/additi-loki"]
+	path = modules/additi-loki
+	url = ../tfmodules/terraform-module-additi-loki.git
+[submodule "modules/additi-project-factory"]
+	path = modules/additi-project-factory
+	url = ../tfmodules/terraform-module-additi-project-factory.git
+[submodule "modules/additi-promtail"]
+	path = modules/additi-promtail
+	url = ../tfmodules/terraform-module-additi-promtail.git
