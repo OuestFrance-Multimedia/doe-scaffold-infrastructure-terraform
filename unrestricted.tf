@@ -1,6 +1,6 @@
 module "unrestricted-project-factory" {
   source = "./modules/additi-project-factory"
-  gcp_org_id          = local.common.gcp_org_id
+  gcp_folder_id       = local.common.gcp_folder_id
   gcp_billing_account = local.common.gcp_billing_account
   gcp_project         = "${local.common.gcp_project}-unrestricted"
   cidr_prefix         = local.common.cidr_prefix
@@ -56,33 +56,77 @@ module "unrestricted-project-factory" {
 
 module "unrestricted-gitlab-variables" {
   source = "./modules/additi-gitlab-variables"
-  
+
   variables   = local.variables.unrestricted
   projects    = module.gitlab.gitlab_project.code_repos
   suffix      = "unrestricted"
 }
 
 module "unrestricted-kubernetes" {
-  source = "./modules/additi-kubernetes"
-  cluster                         = true
-  kubernetes_config               = module.unrestricted-project-factory.kubernetes_config
-  platforms                       = local.infrastructures.unrestricted.platforms
-  cloudsql_proxy_sa_private_key   = module.unrestricted-project-factory.google_application_credentials.cloudsql_proxy_sa_private_key
-  databases_credentials           = module.unrestricted-project-factory.databases_credentials
-  argocd = {
-    enable            = true
-    ingress           = false
-    load_balancer_ip  = module.unrestricted-project-factory.argocd.load_balancer_ip
-    annotations       = module.unrestricted-project-factory.argocd.annotations
-  }
-  authorized_networks             = module.unrestricted-project-factory.authorized_networks
+  source                        = "./modules/additi-kubernetes"
+  kubernetes_config             = module.unrestricted-project-factory.kubernetes_config
+  platforms                     = local.infrastructures.unrestricted.platforms
+  cloudsql_proxy_sa_private_key = module.unrestricted-project-factory.google_application_credentials.cloudsql_proxy_sa_private_key
+  databases_credentials         = module.unrestricted-project-factory.databases_credentials
 }
 
-module "unrestricted-argocd" {
-  source = "./modules/additi-argocd"
+module "unrestricted-kube-prometheus-stack-with-grafana-install" {
+  source              = "./modules/additi-kube-prometheus-stack-with-grafana-install"
+  kubernetes_config   = module.unrestricted-project-factory.kubernetes_config
+  kube_prometheus_stack_values =  <<-EOT
+    grafana:
+      service:
+        loadBalancerIP: "${module.unrestricted-project-factory.grafana.load_balancer_ip}"
+        loadBalancerSourceRanges:
+        ${indent(4,yamlencode(module.unrestricted-project-factory.authorized_networks[*].cidr_block))}
+        type: "LoadBalancer"
+  EOT
+}
+
+module "unrestricted-loki" {
+  source            = "./modules/additi-loki"
+  kubernetes_config = module.unrestricted-project-factory.kubernetes_config
+}
+
+module "unrestricted-promtail" {
+  source            = "./modules/additi-promtail"
+  kubernetes_config = module.unrestricted-project-factory.kubernetes_config
+}
+
+module "unrestricted-grafana" {
+  source = "./modules/additi-grafana"
+
+  url      = "http://${module.unrestricted-project-factory.grafana.address}"
+  username = "admin"
+  password = module.unrestricted-kube-prometheus-stack-with-grafana-install.grafana.admin_password
+}
+
+module "unrestricted-argocd-install" {
+  source                       = "./modules/additi-argocd-install"
+  kubernetes_config            = module.unrestricted-project-factory.kubernetes_config
+
+  argocd_values =  <<-EOT
+    server:
+      service:
+        type: "LoadBalancer"
+        loadBalancerIP: "${module.unrestricted-project-factory.argocd.load_balancer_ip}"
+        loadBalancerSourceRanges:
+        ${indent(4,yamlencode(module.unrestricted-project-factory.authorized_networks[*].cidr_block))}
+  EOT
+
+  argocd_notifications_values = <<-EOT
+    argocdUrl: https://${module.unrestricted-project-factory.argocd.load_balancer_ip}
+  EOT
+
+  teams_webhooks               = local.common.teams_webhooks.unrestricted
+  api_key_argocd_notifications = module.unrestricted-grafana.api_key_argocd_notifications
+}
+
+module "unrestricted-argocd-config" {
+  source = "./modules/additi-argocd-config"
 
   server_addr     = "${module.unrestricted-project-factory.argocd.address}:443"
-  password        = module.unrestricted-kubernetes.argocd.admin_password
+  password        = module.unrestricted-argocd-install.argocd.admin_password
   insecure        = true
   applications    = local.infrastructures.unrestricted.argocd.applications
   target_revision = local.infrastructures.unrestricted.argocd.target_revision
