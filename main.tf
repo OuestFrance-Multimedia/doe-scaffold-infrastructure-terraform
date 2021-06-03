@@ -12,13 +12,12 @@ locals {
 
     teams_webhooks = {
       restricted = {
-        deploy-ofi-common-restricted = ""
+        deploy-ofi-common-restricted = ""  # create the channel on teams & configure the incomming webhook https://argocd-notifications.readthedocs.io/en/stable/services/teams/
       }
       unrestricted = {
-        deploy-ofi-common-unrestricted = ""
+        deploy-ofi-common-unrestricted = "" # create the channel on teams & configure the incomming webhook https://argocd-notifications.readthedocs.io/en/stable/services/teams/
       }
     }
-
   }
 }
 
