@@ -9,6 +9,16 @@ locals {
       { cidr_block = "x.y.w.z/32", display_name = "custom IP" },
     ]
     gitlab_full_path    = ""                              # e.g. gitlabInstance/internal/bu-immobilier
+
+    teams_webhooks = {
+      restricted = {
+        deploy-ofi-common-restricted = ""
+      }
+      unrestricted = {
+        deploy-ofi-common-unrestricted = ""
+      }
+    }
+
   }
 }
 
