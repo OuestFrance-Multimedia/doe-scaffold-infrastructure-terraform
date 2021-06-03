@@ -63,11 +63,13 @@ locals {
       url       = try(module.gitlab.gitlab_project.manifest_repos[local.app1_name].http_url_to_repo, "")
       username  = try(module.gitlab.gitlab_deploy_token.deploy_tokens[local.app1_name].username, "")
       password  = try(module.gitlab.gitlab_deploy_token.deploy_tokens[local.app1_name].token, "")
+      insecure  = false
     }
     # (local.app2_name) = {
     #   url       = try(module.gitlab.gitlab_project.manifest_repos[local.app2_name].http_url_to_repo, "")
     #   username  = try(module.gitlab.gitlab_deploy_token.deploy_tokens[local.app2_name].username, "")
     #   password  = try(module.gitlab.gitlab_deploy_token.deploy_tokens[local.app2_name].token, "")
+    #   insecure  = false
     # }
   }
   infrastructures = {
