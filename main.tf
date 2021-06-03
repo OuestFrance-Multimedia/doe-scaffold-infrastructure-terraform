@@ -31,6 +31,24 @@ locals {
         restricted    = formatlist("${local.app1_name}-%s",["preproduction", "production"]),
         unrestricted  = formatlist("${local.app1_name}-%s",["recette1","recette2","recette3"]),
       }
+      gitlab = {
+        code = {
+          import_url                                       = ""
+          default_branch                                   = "develop"
+          merge_method                                     = "ff"
+          only_allow_merge_if_all_discussions_are_resolved = true
+          snippets_enabled                                 = true
+          tags                                             = []
+          wiki_enabled                                     = true
+        }
+        manifest = {
+          import_url       = ""
+          default_branch   = "unrestricted"
+          snippets_enabled = true
+          tags             = []
+          wiki_enabled     = true
+        }
+      }
     }
     #(local.app2_name) = {
     #  infrastructures = {
