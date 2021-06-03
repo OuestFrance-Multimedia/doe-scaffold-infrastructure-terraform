@@ -28,6 +28,7 @@ locals {
   applications = {
     (local.app1_name) = {
       infrastructures = {
+        # search confluence : Glossaire et conventions de nommage
         restricted    = formatlist("${local.app1_name}-%s",["preprod", "prod"]),
         unrestricted  = formatlist("${local.app1_name}-%s",["rec1","rec2","rec3"]),
       }
