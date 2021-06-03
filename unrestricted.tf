@@ -22,6 +22,7 @@ module "unrestricted-project-factory" {
     disk_type    = "pd-standard"
     image_type   = "COS"                                                    # GKE strongly advise you to use COS image type
     machine_type = "n2-standard-2"
+    preemptible  = true
     min_count    = 2
     max_count    = 4
   }]

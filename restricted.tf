@@ -17,40 +17,59 @@ module "restricted-project-factory" {
 
   gke = true
 
-  gke_node_pools = [{
-    name         = "stoic-swirles"                                          # ensure to report this name in the underlying lines
-    disk_type    = "pd-standard"
-    image_type   = "COS"                                                    # GKE strongly advise you to use COS image type
-    machine_type = "n2-standard-2"
-    min_count    = 2
-    max_count    = 4
-  }]
+  gke_node_pools = [
+    {
+      name         = "common-prod" # ensure to report this name in the underlying lines
+      disk_type    = "pd-standard"
+      image_type   = "COS" # GKE strongly advise you to use COS image type
+      machine_type = "n2-standard-2"
+      min_count    = 2
+      max_count    = 4
+    },
+    {
+      name         = "common-preprod" # ensure to report this name in the underlying lines
+      disk_type    = "pd-standard"
+      image_type   = "COS" # GKE strongly advise you to use COS image type
+      machine_type = "n2-standard-2"
+      min_count    = 2
+      max_count    = 4
+    },
+]
 
   gke_node_pools_labels = {
     "all" : {},
-    "stoic-swirles" : {}
+    "common-prod" : {
+      platform = prod
+    }
+    "common-preprod" : {
+      platform = preprod
+    }
   }
 
   gke_node_pools_metadata = {
     "all" : {},
-    "stoic-swirles" : {}
+    "common-prod" : {}
+    "common-preprod" : {}
   }
 
   gke_node_pools_oauth_scopes = {
     "all" : [
       "https://www.googleapis.com/auth/cloud-platform"
     ],
-    "stoic-swirles" : []
+    "common-prod" : []
+    "common-preprod" : []
   }
 
   gke_node_pools_tags = {
     "all" : [],
-    "stoic-swirles" : []
+    "common-prod" : []
+    "common-preprod" : []
   }
 
   gke_node_pools_taints = {
     "all" : [],
-    "stoic-swirles" : []
+    "common-prod" : []
+    "common-preprod" : []
   }
 }
 
