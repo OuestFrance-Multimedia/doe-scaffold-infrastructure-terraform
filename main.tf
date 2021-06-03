@@ -133,16 +133,3 @@ module "gitlab" {
   full_path     = local.common.gitlab_full_path
   applications  = local.applications
 }
-
-output "argocd" {
-  value = {
-    restricted = {
-      server_addr = "${module.restricted-project-factory.argocd.address}:443"
-      password    = module.restricted-kubernetes.argocd.admin_password
-    }
-    unrestricted = {
-      server_addr = "${module.unrestricted-project-factory.argocd.address}:443"
-      password    = module.unrestricted-kubernetes.argocd.admin_password
-    }
-  }
-}
