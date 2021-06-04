@@ -1,5 +1,5 @@
 module "restricted-project-factory" {
-  source = "./modules/additi-project-factory"
+  source              = "./modules/additi-project-factory"
   gcp_org_id          = local.common.gcp_org_id
   gcp_folder_id       = local.common.gcp_folder_id
   gcp_billing_account = local.common.gcp_billing_account
@@ -7,14 +7,14 @@ module "restricted-project-factory" {
   cidr_prefix         = local.common.cidr_prefix
 
   members = [
-    ""                                                                      # Format "group:groupname@domain"
+    "" # Format "group:groupname@domain"
   ]
 
   platforms = local.infrastructures.restricted.platforms
 
   common_authorized_networks = local.common.common_authorized_networks
 
-  sql_database_instances = []                                               # [{name = "foo",tier = "db-n1-standard-1"}] # [{name = "foo"}] or []
+  sql_database_instances = [] # [{name = "foo",tier = "db-n1-standard-1"}] # [{name = "foo"}] or []
 
   gke = true
 
@@ -35,7 +35,7 @@ module "restricted-project-factory" {
       min_count    = 2
       max_count    = 4
     },
-]
+  ]
 
   gke_node_pools_labels = {
     "all" : {},
@@ -77,9 +77,9 @@ module "restricted-project-factory" {
 module "restricted-gitlab-variables" {
   source = "./modules/additi-gitlab-variables"
 
-  variables   = local.variables.restricted
-  projects    = module.gitlab.gitlab_project.code_repos
-  suffix      = "restricted"
+  variables = local.variables.restricted
+  projects  = module.gitlab.gitlab_project.code_repos
+  suffix    = "restricted"
 }
 
 module "restricted-kubernetes" {
@@ -91,14 +91,14 @@ module "restricted-kubernetes" {
 }
 
 module "restricted-kube-prometheus-stack-with-grafana-install" {
-  source              = "./modules/additi-kube-prometheus-stack-with-grafana-install"
-  kubernetes_config   = module.restricted-project-factory.kubernetes_config
-  kube_prometheus_stack_values =  <<-EOT
+  source                       = "./modules/additi-kube-prometheus-stack-with-grafana-install"
+  kubernetes_config            = module.restricted-project-factory.kubernetes_config
+  kube_prometheus_stack_values = <<-EOT
     grafana:
       service:
         loadBalancerIP: "${module.restricted-project-factory.grafana.load_balancer_ip}"
         loadBalancerSourceRanges:
-        ${indent(4,yamlencode(module.restricted-project-factory.authorized_networks[*].cidr_block))}
+        ${indent(4, yamlencode(module.restricted-project-factory.authorized_networks[*].cidr_block))}
         type: "LoadBalancer"
   EOT
 }
@@ -122,16 +122,16 @@ module "restricted-grafana" {
 }
 
 module "restricted-argocd-install" {
-  source                       = "./modules/additi-argocd-install"
-  kubernetes_config            = module.restricted-project-factory.kubernetes_config
+  source            = "./modules/additi-argocd-install"
+  kubernetes_config = module.restricted-project-factory.kubernetes_config
 
-  argocd_values =  <<-EOT
+  argocd_values = <<-EOT
     server:
       service:
         type: "LoadBalancer"
         loadBalancerIP: "${module.restricted-project-factory.argocd.load_balancer_ip}"
         loadBalancerSourceRanges:
-        ${indent(4,yamlencode(module.restricted-project-factory.authorized_networks[*].cidr_block))}
+        ${indent(4, yamlencode(module.restricted-project-factory.authorized_networks[*].cidr_block))}
   EOT
 
   argocd_notifications_values = <<-EOT

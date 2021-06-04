@@ -1,5 +1,5 @@
 module "unrestricted-project-factory" {
-  source = "./modules/additi-project-factory"
+  source              = "./modules/additi-project-factory"
   gcp_org_id          = local.common.gcp_org_id
   gcp_folder_id       = local.common.gcp_folder_id
   gcp_billing_account = local.common.gcp_billing_account
@@ -7,21 +7,21 @@ module "unrestricted-project-factory" {
   cidr_prefix         = local.common.cidr_prefix
 
   members = [
-    ""                                                                      # Format "group:groupname@domain"
+    "" # Format "group:groupname@domain"
   ]
 
   platforms = local.infrastructures.unrestricted.platforms
 
   common_authorized_networks = local.common.common_authorized_networks
 
-  sql_database_instances = []                                               # [{name = "foo",tier = "db-n1-standard-1"}] # [{name = "foo"}] or []
+  sql_database_instances = [] # [{name = "foo",tier = "db-n1-standard-1"}] # [{name = "foo"}] or []
 
   gke = true
 
   gke_node_pools = [{
-    name         = "stoic-swirles"                                          # ensure to report this name in the underlying lines
+    name         = "stoic-swirles" # ensure to report this name in the underlying lines
     disk_type    = "pd-standard"
-    image_type   = "COS"                                                    # GKE strongly advise you to use COS image type
+    image_type   = "COS" # GKE strongly advise you to use COS image type
     machine_type = "n2-standard-2"
     preemptible  = true
     min_count    = 2
@@ -59,9 +59,9 @@ module "unrestricted-project-factory" {
 module "unrestricted-gitlab-variables" {
   source = "./modules/additi-gitlab-variables"
 
-  variables   = local.variables.unrestricted
-  projects    = module.gitlab.gitlab_project.code_repos
-  suffix      = "unrestricted"
+  variables = local.variables.unrestricted
+  projects  = module.gitlab.gitlab_project.code_repos
+  suffix    = "unrestricted"
 }
 
 module "unrestricted-kubernetes" {
@@ -73,14 +73,14 @@ module "unrestricted-kubernetes" {
 }
 
 module "unrestricted-kube-prometheus-stack-with-grafana-install" {
-  source              = "./modules/additi-kube-prometheus-stack-with-grafana-install"
-  kubernetes_config   = module.unrestricted-project-factory.kubernetes_config
-  kube_prometheus_stack_values =  <<-EOT
+  source                       = "./modules/additi-kube-prometheus-stack-with-grafana-install"
+  kubernetes_config            = module.unrestricted-project-factory.kubernetes_config
+  kube_prometheus_stack_values = <<-EOT
     grafana:
       service:
         loadBalancerIP: "${module.unrestricted-project-factory.grafana.load_balancer_ip}"
         loadBalancerSourceRanges:
-        ${indent(4,yamlencode(module.unrestricted-project-factory.authorized_networks[*].cidr_block))}
+        ${indent(4, yamlencode(module.unrestricted-project-factory.authorized_networks[*].cidr_block))}
         type: "LoadBalancer"
   EOT
 }
@@ -104,16 +104,16 @@ module "unrestricted-grafana" {
 }
 
 module "unrestricted-argocd-install" {
-  source                       = "./modules/additi-argocd-install"
-  kubernetes_config            = module.unrestricted-project-factory.kubernetes_config
+  source            = "./modules/additi-argocd-install"
+  kubernetes_config = module.unrestricted-project-factory.kubernetes_config
 
-  argocd_values =  <<-EOT
+  argocd_values = <<-EOT
     server:
       service:
         type: "LoadBalancer"
         loadBalancerIP: "${module.unrestricted-project-factory.argocd.load_balancer_ip}"
         loadBalancerSourceRanges:
-        ${indent(4,yamlencode(module.unrestricted-project-factory.authorized_networks[*].cidr_block))}
+        ${indent(4, yamlencode(module.unrestricted-project-factory.authorized_networks[*].cidr_block))}
   EOT
 
   argocd_notifications_values = <<-EOT
