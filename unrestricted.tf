@@ -1,7 +1,7 @@
 module "unrestricted-project-factory" {
   source              = "./modules/additi-project-factory"
   gcp_org_id          = local.common.gcp_org_id
-  gcp_folder_id       = local.common.gcp_folder_id
+  gcp_folder_id       = local.unrestricted.gcp_folder_id
   gcp_billing_account = local.common.gcp_billing_account
   gcp_project         = "${local.common.gcp_project}-unrestricted"
   cidr_prefix         = local.common.cidr_prefix

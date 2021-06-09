@@ -1,7 +1,12 @@
 locals {
+  restricted = {
+    gcp_folder_id = "" # folder id
+  }
+  unrestricted = {
+    gcp_folder_id = "" # folder id
+  }
   common = {
     gcp_org_id          = "" # gcloud organizations list --filter="displayName=XXXX" --format="value(name)"
-    gcp_folder_id       = "" # gcloud resource-manager folders list --organization [ORG_ID]
     gcp_billing_account = "" # gcloud beta billing accounts list --filter="displayName=YYYY" --format="value(name)"
     gcp_project         = "" # e.g. ofi-common    -name must be 4 to 30 characters with lowercase and uppercase letters, numbers, hyphen, single-quote, double-quote, space, and exclamation point.        demo-devops-5d4e project_id contains prohibited words
     cidr_prefix         = "" # Search Confluence : Attribution+des+CIDR
