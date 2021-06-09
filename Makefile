@@ -48,17 +48,6 @@ create-unrestricted:
 	terraform apply -target 'module.unrestricted-argocd-install'
 	terraform apply -target 'module.unrestricted-argocd-config'
 
-create-unrestricted-auto-approve: ## create-unrestricted-auto-approve
-create-unrestricted-auto-approve:
-	set -e
-	terraform apply -auto-approve -target 'module.unrestricted-project-factory'
-	terraform apply -auto-approve -target 'module.unrestricted-gitlab-variables'
-	terraform apply -auto-approve -target 'module.unrestricted-kubernetes'
-	terraform apply -auto-approve -target 'module.unrestricted-kube-prometheus-stack-with-grafana-install'
-	make port-forward-up-unrestricted && terraform apply -auto-approve -target 'module.unrestricted-grafana'
-	terraform apply -auto-approve -target 'module.unrestricted-argocd-install'
-	terraform apply -auto-approve -target 'module.unrestricted-argocd-config'
-
 show-unrestricted-creds: ## show-unrestricted-creds
 show-unrestricted-creds:
 	echo "grafana :"
@@ -67,7 +56,6 @@ show-unrestricted-creds:
 	echo "argocd :"
 	terraform show -json|jq '.values.root_module.child_modules[].resources[] | select(.address == "module.unrestricted-project-factory.google_compute_address.argocd[0]") | .values.address'
 	terraform show -json|jq '.values.root_module.child_modules[].resources[] | select(.address == "module.unrestricted-argocd-install.random_password.argocd_admin_password") | .values.result'
-
 
 create-restricted: ## create-restricted
 create-restricted:
@@ -89,30 +77,6 @@ show-restricted-creds:
 	echo "argocd :"
 	terraform show -json|jq '.values.root_module.child_modules[].resources[] | select(.address == "module.restricted-project-factory.google_compute_address.argocd[0]") | .values.address'
 	terraform show -json|jq '.values.root_module.child_modules[].resources[] | select(.address == "module.restricted-argocd-install.random_password.argocd_admin_password") | .values.result'
-
-port-forward-up-unrestricted: ## port-forward-up-unrestricted
-port-forward-up-unrestricted:
-	source .env
-	nohup kubectl port-forward svc/kube-prometheus-stack-grafana 2001:80 -n monitoring --context=$$UNRESTRICTED_CLUSTER_CONTEXT &>/dev/null &
-
-port-forward-up-restricted: ## port-forward-up-unrestricted
-port-forward-up-restricted:
-	source .env
-	nohup kubectl port-forward svc/kube-prometheus-stack-grafana 2101:80 -n monitoring --context=$$RESTRICTED_CLUSTER_CONTEXT 	&>/dev/null &
-
-port-forward-up: ## port-forward-up
-port-forward-up:
-	make port-forward-up-unrestricted
-	make port-forward-up-restricted
-	sleep 2
-	firefox http://127.0.0.1:2001
-	firefox -private-window && sleep 1 && firefox -private-window http://127.0.0.1:2101
-
-port-forward-down: ## port-forward-down
-port-forward-down:
-	set +e
-	pkill -f "^kubectl port-forward svc/kube-prometheus-stack-grafana 2001:"
-	pkill -f "^kubectl port-forward svc/kube-prometheus-stack-grafana 2101:"
 
 help:
 	@grep -E '(^[a-zA-Z_-]+:.*?##.*$$)' Makefile | awk 'BEGIN {FS = ":.*?## "}; {printf "\033[32m%-30s\033[0m %s\n", $$1, $$2}'
