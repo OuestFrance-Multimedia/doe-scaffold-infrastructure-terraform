@@ -26,22 +26,6 @@ init:
 	gcloud container clusters get-credentials $$UNRESTRICTED_CLUSTER_NAME 	--project=$$UNRESTRICTED_GCP_PROJECT_ID --region $$UNRESTRICTED_CLUSTER_LOCATION
 	gcloud container clusters get-credentials $$RESTRICTED_CLUSTER_NAME 		--project=$$RESTRICTED_GCP_PROJECT_ID 	--region $$RESTRICTED_CLUSTER_LOCATION
 
-# terraform destroy -target 'module.restricted-argocd-config'
-# terraform destroy -target 'module.restricted-argocd-install'
-# terraform destroy -target 'module.restricted-grafana'
-# terraform destroy -target 'module.restricted-kube-prometheus-stack-with-grafana-install'
-# terraform destroy -target 'module.restricted-kubernetes'
-
-destroy: ## destroy
-destroy:
-	set -e
-#	terraform destroy -auto-approve -target 'module.unrestricted-grafana'
-#	terraform destroy -auto-approve	-target 'module.restricted-grafana'
-	terraform destroy -auto-approve -target 'module.unrestricted-argocd-config' -target 'module.restricted-argocd-config'
-	terraform destroy -auto-approve -target 'module.unrestricted-kubernetes' -target 'module.restricted-kubernetes'
-	terraform destroy -auto-approve -target 'module.unrestricted-gitlab-variables' -target 'module.restricted-gitlab-variables'
-	terraform destroy -auto-approve -target 'module.unrestricted-project-factory' -target 'module.restricted-project-factory'
-
 create: ## create
 create:
 	init
