@@ -126,6 +126,10 @@ module "restricted-argocd-install" {
   kubernetes_config = module.restricted-project-factory.kubernetes_config
 
   argocd_values = <<-EOT
+    repoServer:
+      env:
+      - name: ARGOCD_GIT_MODULES_ENABLED
+        value: false
     server:
       service:
         type: "LoadBalancer"
