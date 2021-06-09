@@ -4,12 +4,6 @@
 [submodule "modules/additi-argocd-install"]
 	path = modules/additi-argocd-install
 	url = ../tfmodules/terraform-module-additi-argocd-install.git
-[submodule "modules/additi-gilab"]
-	path = modules/additi-gilab
-	url = ../tfmodules/terraform-module-additi-gitlab.git
-[submodule "modules/additi-gilab-variables"]
-	path = modules/additi-gilab-variables
-	url = ../tfmodules/terraform-module-additi-gitlab-variables.git
 [submodule "modules/additi-google-compute-network"]
 	path = modules/additi-google-compute-network
 	url = ../tfmodules/terraform-module-additi-google-compute-network.git
@@ -31,3 +25,9 @@
 [submodule "modules/additi-promtail"]
 	path = modules/additi-promtail
 	url = ../tfmodules/terraform-module-additi-promtail.git
+[submodule "modules/additi-gitlab"]
+	path = modules/additi-gitlab
+	url = ../tfmodules/terraform-module-additi-gitlab.git
+[submodule "modules/additi-gitlab-variables"]
+	path = modules/additi-gitlab-variables
+	url = ../tfmodules/terraform-module-additi-gitlab-variables.git
