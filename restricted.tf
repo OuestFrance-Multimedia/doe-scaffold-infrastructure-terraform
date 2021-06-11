@@ -39,12 +39,8 @@ module "restricted-project-factory" {
 
   gke_node_pools_labels = {
     "all" : {},
-    "common-prod" : {
-      platform = prod
-    }
-    "common-preprod" : {
-      platform = preprod
-    }
+    "common-prod" : {}
+    "common-preprod" : {}
   }
 
   gke_node_pools_metadata = {

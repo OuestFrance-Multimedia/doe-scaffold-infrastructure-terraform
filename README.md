@@ -1,16 +1,6 @@
 # Infos
 
-This is a 10 steps creation terraform workflow
-  1. Follow the the pre-apply path
-  2. terraform apply -target 'module.gitlab'
-  3. terraform apply -target 'module.project-factory-unrestricted'
-  4. terraform apply -target 'module.gitlab-variables-unrestricted'
-  5. terraform apply -target 'module.project-kubernetes-unrestricted'
-  6. terraform apply -target 'module.project-argocd-unrestricted'
-  7. terraform apply -target 'module.project-factory-restricted'
-  8. terraform apply -target 'module.gitlab-variables-restricted'
-  9. terraform apply -target 'module.project-kubernetes-restricted'
-  10. terraform apply -target 'module.project-argocd-restricted'
+Check Makefile to understand module precedence
 
 # Bootstrap or update the project
 
@@ -32,7 +22,12 @@ git submodule update --init --recursive
 
     export GOOGLE_APPLICATION_CREDENTIALS=/home/olivier/git/gitlab-additi/internal/dsi-devops-engineers/infrastructure-terraform-gcp-org-of2m.fr/credentials/terraform-sa.json
 
-7. init terraform using http backend method :
+7. Load external scripts to your `$PATH`
+
+    clone git@gitlab.com:additi/internal/dsi-devops-engineers/tools/infrastructure-configuration-docker-gitlabci-terraform.git
+and add scripts directory to your `$PATH`
+
+8. init terraform using http backend method :
 
 ```
 terraform init \
