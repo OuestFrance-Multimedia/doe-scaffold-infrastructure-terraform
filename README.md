@@ -14,22 +14,20 @@ git submodule update --init --recursive
 
 3. Customise locals in main.tf according to your needs
 
-4. Update members in restricted & unrestricted files according to your needs.
+4. Add the script directory of [this repo](git@gitlab.com:additi/internal/dsi-devops-engineers/infrastructure-configuration-docker-gitlabci-terraform.git) to your PATH
 
-5. Add the script directory of [this repo](git@gitlab.com:additi/internal/dsi-devops-engineers/infrastructure-configuration-docker-gitlabci-terraform.git) to your PATH
+5. export GITLAB_TOKEN and GITLAB_USERNAME in your env
 
-6. export GITLAB_TOKEN and GITLAB_USERNAME in your env
-
-7. export the SA Google application credentials to your env. generate  it from the /internal/dsi-devops-engineers/infrastructure-terraform-gcp-org-of2m.fr repo. 
+6. export the SA Google application credentials to your env. generate  it from the /internal/dsi-devops-engineers/infrastructure-terraform-gcp-org-of2m.fr repo.
 
     export GOOGLE_APPLICATION_CREDENTIALS=/home/olivier/git/gitlab-additi/internal/dsi-devops-engineers/infrastructure-terraform-gcp-org-of2m.fr/credentials/terraform-sa.json
 
-8. Load external scripts to your `$PATH`
+7. Load external scripts to your `$PATH`
 
     clone git@gitlab.com:additi/internal/dsi-devops-engineers/tools/infrastructure-configuration-docker-gitlabci-terraform.git
 and add scripts directory to your `$PATH`
 
-9. init terraform using http backend method :
+8. init terraform using http backend method :
 
 ```
 terraform init \

@@ -6,9 +6,7 @@ module "restricted-project-factory" {
   gcp_project         = "${local.common.gcp_project}-restricted"
   cidr_prefix         = local.common.cidr_prefix
 
-  members = [
-    "" # Format "group:groupname@domain"
-  ]
+  members = local.restricted.project_members
 
   platforms = local.infrastructures.restricted.platforms
 

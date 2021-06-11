@@ -1,9 +1,11 @@
 locals {
   restricted = {
     gcp_folder_id = "" # folder id
+    project_members = [""]  # Mandatory, Format ["group:groupname@domain", "user:username@domain"]
   }
   unrestricted = {
     gcp_folder_id = "" # folder id
+    project_members = [""] # Mandatory, Format ["group:groupname@domain", "user:username@domain"]
   }
   common = {
     gcp_org_id          = "" # gcloud organizations list --filter="displayName=XXXX" --format="value(name)"

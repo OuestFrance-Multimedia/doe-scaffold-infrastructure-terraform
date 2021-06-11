@@ -6,9 +6,7 @@ module "unrestricted-project-factory" {
   gcp_project         = "${local.common.gcp_project}-unrestricted"
   cidr_prefix         = local.common.cidr_prefix
 
-  members = [
-    "" # Format "group:groupname@domain"
-  ]
+  members = local.unrestricted.project_members
 
   platforms = local.infrastructures.unrestricted.platforms
 
