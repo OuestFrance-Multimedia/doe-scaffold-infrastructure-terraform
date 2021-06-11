@@ -123,7 +123,7 @@ module "restricted-argocd-install" {
     repoServer:
       env:
       - name: ARGOCD_GIT_MODULES_ENABLED
-        value: false
+        value: "false"
     server:
       service:
         type: "LoadBalancer"
