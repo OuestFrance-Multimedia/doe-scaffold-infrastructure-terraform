@@ -14,6 +14,11 @@ submodule-init: ## submodule-init
 submodule-init:
 	git submodule update --init --recursive
 	git submodule update --remote --recursive
+	cd modules/additi-kubernetes; \
+		echo "input path to git-crypt unlock key file for kubernetes module (see Keepass: gitlab/tfmodules/additi-kubernetes-gitcrypt): "; \
+		read UNLOCK_FILE; \
+		git-crypt unlock $${UNLOCK_FILE}
+
 
 init: ## init
 init:
