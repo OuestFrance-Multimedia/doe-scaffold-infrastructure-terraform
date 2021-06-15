@@ -29,7 +29,8 @@ init:
 	set +e
 	source .env
 	gcloud container clusters get-credentials $$UNRESTRICTED_CLUSTER_NAME 	--project=$$UNRESTRICTED_GCP_PROJECT_ID --region $$UNRESTRICTED_CLUSTER_LOCATION
-	gcloud container clusters get-credentials $$RESTRICTED_CLUSTER_NAME 		--project=$$RESTRICTED_GCP_PROJECT_ID 	--region $$RESTRICTED_CLUSTER_LOCATION
+	gcloud container clusters get-credentials $$RESTRICTED_CLUSTER_NAME 	--project=$$RESTRICTED_GCP_PROJECT_ID 	--region $$RESTRICTED_CLUSTER_LOCATION
+	exit 0
 
 create: ## create
 create:
