@@ -8,11 +8,15 @@ module "restricted-project-factory" {
 
   members = local.restricted.project_members
 
+  developer_groups = [] 
+
   platforms = local.infrastructures.restricted.platforms
 
   common_authorized_networks = local.common.common_authorized_networks
 
   sql_database_instances = [] # [{name = "foo",tier = "db-n1-standard-1"}] # [{name = "foo"}] or []
+
+  sql_database_instances_replica = [] # [{name = "foo",tier = "db-n1-standard-1", master_instance_name = "foo" }] # [{name = "foo"}] or []
 
   gke = true
 
