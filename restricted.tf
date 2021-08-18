@@ -20,6 +20,12 @@ module "restricted-project-factory" {
 
   gke = true
 
+  # Project team GKE authorizations :
+  #    unrestricted -> use `gke_developers` and leave `gke_viewers` empty
+  #    restricted   -> `gke_viewers` end leave `gke_developers` empty
+  gke_developers = []
+  gke_viewers = []
+
   gke_node_pools = [
     {
       name         = "common-prod" # ensure to report this name in the underlying lines
