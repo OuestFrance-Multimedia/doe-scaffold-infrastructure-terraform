@@ -18,6 +18,8 @@ module "unrestricted-project-factory" {
 
   sql_database_instances_replica = [] # [{name = "foo",tier = "db-n1-standard-1", master_instance_name = "foo" }] # [{name = "foo"}] or []
 
+  business_buckets = merge(zipmap(flatten([for k, v in local.applications : keys(v.app_buckets) if contains(keys(v), "app_buckets")]), flatten([for k, v in local.applications : values(v.app_buckets) if contains(keys(v), "app_buckets")])), local.global_buckets)
+
   gke = true
 
   # Project team GKE authorizations :
