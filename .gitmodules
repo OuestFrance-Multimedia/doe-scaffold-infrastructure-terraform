@@ -31,3 +31,15 @@
 [submodule "modules/additi-gitlab-variables"]
 	path = modules/additi-gitlab-variables
 	url = ../tfmodules/terraform-module-additi-gitlab-variables.git
+[submodule "modules/additi-nginx-ingress-controller"]
+	path = modules/additi-nginx-ingress-controller
+	url = ../tfmodules/terraform-module-additi-nginx-ingress-controller.git
+	branch = main
+[submodule "modules/additi-cert-manager"]
+	path = modules/additi-cert-manager
+	url = ../tfmodules/terraform-module-additi-cert-manager.git
+	branch = main
+[submodule "modules/additi-admin-google-com-saml2"]
+	path = modules/additi-admin-google-com-saml2
+	url = ../tfmodules/terraform-module-additi-admin-google-com-saml2.git
+	branch = main
